@@ -27,6 +27,14 @@ export class CdkDemoStack extends Stack {
     task.addMethod('POST');
     task.addMethod('PUT');
     task.addMethod('DELETE');
+
+    //validator
+    const requestValidator = new apigw.RequestValidator(this, 'api-validator', {
+      restApi: api,
+      requestValidatorName: 'requestValidatorName',
+      validateRequestBody: true,
+      validateRequestParameters: true
+    });
     // The code that defines your stack goes here
 
     // example resource
