@@ -31,6 +31,10 @@
     "@aws-cdk/core:target-partitions": [
       "aws",
       "aws-cn"
-    ]
+    ],
+    "target":"dev",
+    "table":{
+      "name":"todo"
+    }
   }
 }
