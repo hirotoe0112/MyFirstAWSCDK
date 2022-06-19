@@ -1,8 +1,8 @@
 {
-  "name": "cdk-demo",
+  "name": "todo",
   "version": "0.1.0",
   "bin": {
-    "cdk-demo": "bin/cdk-demo.js"
+    "todo": "bin/todo.js"
   },
   "scripts": {
     "build": "tsc",

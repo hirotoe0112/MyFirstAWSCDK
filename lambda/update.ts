@@ -3,12 +3,19 @@ import * as AWS from 'aws-sdk';
 const db = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME=process.env.TABLE_NAME || "";
 
+interface Obj{
+  [prop:string]:any,
+}
+
 export const handler = async (event: any,): Promise<any> => {
   const pathParams = event.pathParameters;
   const requestBody = JSON.parse(event.body);
   const userId = pathParams.userId;
   const taskId = pathParams.taskId;
   const date = Date.now();
+
+  const keyList = Object.keys(requestBody);
+  const attributes:Obj = {};
 
   const params = {
     TableName:TABLE_NAME,
@@ -17,12 +24,10 @@ export const handler = async (event: any,): Promise<any> => {
       taskId:taskId
     },
     UpdateExpression:'set updateDt = :updateDt',
-    ExpressionAttributeValues:{
-      ':updateDt':date,
-    },
+    ExpressionAttributeValues:attributes,
   }
 
-  const keyList = Object.keys(requestBody);
+  attributes[':updateDt'] = date;
   keyList.forEach((key) => {
     params.UpdateExpression += `, ${key} = :${key}`;
     params.ExpressionAttributeValues[`:${key}`] = requestBody[key];
