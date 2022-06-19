@@ -6,14 +6,18 @@ const TABLE_NAME=process.env.TABLE_NAME || "";
 
 export const handler = async (event: any,): Promise<any> => {
   const requestBody = JSON.parse(event.body);
+  const userId = requestBody.userId;
+  const title = requestBody.title;
+  const content = requestBody.content;
   const date = Date.now();
+
   const params = {
     TableName:TABLE_NAME,
     Item:{
-      userId:requestBody.userId,
+      userId:userId,
       taskId:uuidv4(),
-      title:requestBody.title,
-      content:requestBody.content,
+      title:title,
+      content:content,
       createDt:date,
       updateDt:date
     }
