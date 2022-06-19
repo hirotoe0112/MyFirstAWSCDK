@@ -1,7 +1,7 @@
 import { Construct } from 'constructs';
 import { aws_lambda_nodejs as lambda } from 'aws-cdk-lib';
 
-export class LambdaForGetTasks {
+export class LambdaForGetAllTasks {
   private readonly _scope:Construct;
   private readonly _tableName:string;
 
@@ -11,9 +11,8 @@ export class LambdaForGetTasks {
   }
 
   public create():lambda.NodejsFunction{
-    return new lambda.NodejsFunction(this._scope, 'lambda-get', {
-      entry:'lambda/get.ts',
-      functionName: 'get-tasks',
+    return new lambda.NodejsFunction(this._scope, 'lambda-get-all', {
+      entry:'lambda/get-all.ts',
       environment:{
         TABLE_NAME:this._tableName
       }

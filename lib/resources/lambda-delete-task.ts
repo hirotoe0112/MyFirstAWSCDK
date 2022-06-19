@@ -13,7 +13,6 @@ export class LambdaForDeleteTask {
   public create():lambda.NodejsFunction{
     return new lambda.NodejsFunction(this._scope, 'lambda-delete', {
       entry:'lambda/delete.ts',
-      functionName: 'delete-task',
       environment:{
         TABLE_NAME:this._tableName
       }

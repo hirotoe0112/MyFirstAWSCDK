@@ -32,9 +32,8 @@
       "aws",
       "aws-cn"
     ],
-    "target":"dev",
-    "table":{
-      "name":"todo"
+    "variables":{
+      "target":"dev"
     }
   }
 }

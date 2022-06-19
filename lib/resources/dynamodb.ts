@@ -12,7 +12,6 @@ export class DynamoDb {
 
   public create():dynamoDb.Table{
     return new dynamoDb.Table(this._scope, 'todo', {
-      tableName:"todo",
       partitionKey:{
         name:'userId',
         type:AttributeType.STRING,
