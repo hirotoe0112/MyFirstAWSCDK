@@ -30,12 +30,13 @@ export class ApiGateway {
     const tasksRoot = api.root.addResource('tasks');
     const tasksUser = tasksRoot.addResource('{userId}');
     tasksUser.addMethod('GET', new apigw.LambdaIntegration(this._getAllFunction));
-    const taskSingle = tasksUser.addResource('{taskId}');
+    const taskRoot = api.root.addResource('task');
+    const taskUser = taskRoot.addResource('{userId}');
+    taskUser.addMethod('POST', new apigw.LambdaIntegration(this._addFunction));
+    const taskSingle = taskUser.addResource('{taskId}');
     taskSingle.addMethod('GET', new apigw.LambdaIntegration(this._getSingleFunction));
-    const task = api.root.addResource('task');
-    task.addMethod('POST', new apigw.LambdaIntegration(this._addFunction));
-    task.addMethod('PUT', new apigw.LambdaIntegration(this._updateFunction));
-    task.addMethod('DELETE', new apigw.LambdaIntegration(this._deleteFunction));
+    taskSingle.addMethod('PATCH', new apigw.LambdaIntegration(this._updateFunction));
+    taskSingle.addMethod('DELETE', new apigw.LambdaIntegration(this._deleteFunction));
 
     return api;
   }

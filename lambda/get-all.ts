@@ -4,8 +4,8 @@ const db = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME=process.env.TABLE_NAME || "";
 
 export const handler = async (event: any,): Promise<any> => {
-  const requestBody = event.pathParameters;
-  const userId = requestBody.userId;
+  const pathParams = event.pathParameters;
+  const userId = pathParams.userId;
 
   const params = {
     TableName:TABLE_NAME,
