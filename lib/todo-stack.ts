@@ -7,6 +7,7 @@ import { LambdaForAddTask } from './resources/lambda-add-task';
 import { LambdaForUpdateTask } from './resources/lambda-update-task';
 import { LambdaForDeleteTask } from './resources/lambda-delete-task';
 import { ApiGateway } from './resources/apigateway';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
 
 export class TodoStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -49,8 +50,19 @@ export class TodoStack extends Stack {
     /**
      * Create API Gateway Resource
      */
-    const apiGateway = new ApiGateway(this, env.target, getAllFunction, getSingleFunction, addFunction, updateFunction, deleteFunction);
-    apiGateway.create();
+    const apiGateway = new ApiGateway(this, env.target);
+    const api = apiGateway.create();
 
+    /**
+     * Set Integration
+     */
+    const tasksRoot = api.root.addResource('tasks');
+    const tasksUser = tasksRoot.addResource('{userId}');
+    tasksUser.addMethod('GET', new apigw.LambdaIntegration(getAllFunction));
+    tasksUser.addMethod('POST', new apigw.LambdaIntegration(addFunction));
+    const taskSingle = tasksUser.addResource('{taskId}');
+    taskSingle.addMethod('GET', new apigw.LambdaIntegration(getSingleFunction));
+    taskSingle.addMethod('PATCH', new apigw.LambdaIntegration(updateFunction));
+    taskSingle.addMethod('DELETE', new apigw.LambdaIntegration(deleteFunction));
   }
 }
