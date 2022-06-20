@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { Stack, StackProps, aws_lambda_nodejs as lambda } from 'aws-cdk-lib';
+import { aws_lambda_nodejs as lambda } from 'aws-cdk-lib';
 
 export class LambdaForUpdateTask {
   private readonly _scope:Construct;
