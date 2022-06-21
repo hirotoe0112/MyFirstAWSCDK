@@ -14,7 +14,7 @@ export class TodoStack extends Stack {
     super(scope, id, props);
 
     /**
-     * Get environment variable from CDK.json
+     * Get environment variable from cdk.json
      */
     const env = scope.node.tryGetContext('variables');
 
