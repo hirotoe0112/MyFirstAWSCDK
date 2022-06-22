@@ -8,7 +8,10 @@ import { TodoStack } from '../lib/todo-stack';
 
 // example test. To run these tests, uncomment this file along with the
 // example resource in lib/cdk-demo-stack.ts
-test('fine grained assertions', () => {
+test('Snapshot test', () => {
+    /**
+     * Set up
+     */
     const app = new cdk.App(
         {
             context:{
@@ -18,13 +21,32 @@ test('fine grained assertions', () => {
             }
         }
     )
-
-
     const todoStack = new TodoStack(app, 'test-todo');
-
     const template = Template.fromStack(todoStack);
 
+    expect(template.toJSON()).toMatchSnapshot();
+})
+test('fine grained assertions', () => {
+    /**
+     * Set up
+     */
+    const app = new cdk.App(
+        {
+            context:{
+                "variables":{
+                    "target":"dev"
+                }
+            }
+        }
+    )
+    const todoStack = new TodoStack(app, 'test-todo');
+    const template = Template.fromStack(todoStack);
+
+    /**
+     * Test
+     */
     template.resourceCountIs('AWS::Lambda::Function', 5);
+    template.resourceCountIs('AWS::DynamoDB::Table', 1);
 
 //   const app = new cdk.App();
 //     // WHEN
