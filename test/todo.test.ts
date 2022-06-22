@@ -27,7 +27,7 @@ test('Snapshot test', () => {
     /**
      * Test
      */
-    expect(template.toJSON()).toMatchSnapshot();
+    //expect(template.toJSON()).toMatchSnapshot();
 })
 
 test('Fine-grained assertions', () => {
