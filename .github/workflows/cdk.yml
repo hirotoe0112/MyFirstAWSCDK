@@ -25,7 +25,7 @@ jobs:
 
       - name: Unit tests
         if: contains(github.event_name, 'pull_request')
-        run: npm test -- -u
+        run: npm run test
 
       - name: CDK Diff Check
         if: contains(github.event_name, 'pull_request')
