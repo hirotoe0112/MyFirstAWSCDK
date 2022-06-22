@@ -24,9 +24,13 @@ test('Snapshot test', () => {
     const todoStack = new TodoStack(app, 'test-todo');
     const template = Template.fromStack(todoStack);
 
+    /**
+     * Test
+     */
     expect(template.toJSON()).toMatchSnapshot();
 })
-test('fine grained assertions', () => {
+
+test('Fine-grained assertions', () => {
     /**
      * Set up
      */
