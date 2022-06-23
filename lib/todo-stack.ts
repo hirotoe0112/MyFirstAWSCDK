@@ -2,6 +2,7 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { UserPool } from './resources/userpool';
 import { DynamoDb } from './resources/dynamodb';
+import { LambdaForAddUser } from './resources/lambda-add-user';
 import { LambdaForGetAllTasks } from './resources/lambda-get-all-tasks';
 import { LambdaForGetSingleTask } from './resources/lambda-get-single-task';
 import { LambdaForAddTask } from './resources/lambda-add-task';
@@ -28,7 +29,7 @@ export class TodoStack extends Stack {
     const table = dynamoDb.create();
 
     /**
-     * Create Lambda Resources
+     * Create Lambda Resources(task)
      */
     const lambdaForGetAllTasks = new LambdaForGetAllTasks(this, table.tableName);
     const getAllFunction = lambdaForGetAllTasks.create();
@@ -60,7 +61,7 @@ export class TodoStack extends Stack {
      * Create Cognito Resource
      */
     const userPool = new UserPool(this);
-    const pool = userPool.create();
+    const [pool, client] = userPool.create();
 
     /**
      * Create Authorizer
@@ -69,7 +70,7 @@ export class TodoStack extends Stack {
     const auth = authorizer.create();
 
     /**
-     * Setting API Gateway
+     * Setting API Gateway(task)
      */
     const tasksRoot = api.root.addResource('tasks');
     const tasksUser = tasksRoot.addResource('{userId}');
@@ -81,7 +82,7 @@ export class TodoStack extends Stack {
       }
     });
     //Add Task
-    const postModel = new apigw.Model(this, 'post-validator', {
+    const postTaskModel = new apigw.Model(this, 'post-validator-task', {
       restApi: api,
       contentType: 'application/json',
       description: 'To validate the request body',
@@ -94,12 +95,12 @@ export class TodoStack extends Stack {
       }
     })
     tasksUser.addMethod('POST', new apigw.LambdaIntegration(addFunction), {
-      requestValidator: new apigw.RequestValidator(this, 'body-validator', {
+      requestValidator: new apigw.RequestValidator(this, 'body-validator-task', {
         restApi:api,
         validateRequestBody:true,
       }),
       requestModels:{
-        'application/json': postModel,
+        'application/json': postTaskModel,
       },
       authorizationType: AuthorizationType.COGNITO,
       authorizer:{
@@ -126,6 +127,39 @@ export class TodoStack extends Stack {
       authorizationType: AuthorizationType.COGNITO,
       authorizer:{
         authorizerId: auth.ref,
+      }
+    });
+
+    /**
+     * Create Lambda Resources(user)
+     */
+    const lambdaForAddUser = new LambdaForAddUser(this, client.userPoolClientId);
+    const addUserFunction = lambdaForAddUser.create();
+
+    /**
+     * Setting API Gateway(user)
+     */
+    //Add User
+    const usersRoot = api.root.addResource('users');
+    const postUserModel = new apigw.Model(this, 'post-validator-user', {
+      restApi: api,
+      contentType: 'application/json',
+      description: 'To validate the request body',
+      schema:{
+        type:JsonSchemaType.OBJECT,
+        required:[
+          'username',
+          'password',
+        ]
+      }
+    })
+    usersRoot.addMethod('POST', new apigw.LambdaIntegration(addUserFunction), {
+      requestValidator: new apigw.RequestValidator(this, 'body-validator-user', {
+        restApi:api,
+        validateRequestBody:true,
+      }),
+      requestModels:{
+        'application/json': postUserModel,
       }
     });
   }
