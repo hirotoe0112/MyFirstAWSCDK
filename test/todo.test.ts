@@ -49,7 +49,7 @@ test('Fine-grained assertions', () => {
     /**
      * Test
      */
-    template.resourceCountIs('AWS::Lambda::Function', 6);
+    template.resourceCountIs('AWS::Lambda::Function', 7);
     template.resourceCountIs('AWS::DynamoDB::Table', 1);
 
 //   const app = new cdk.App();
