@@ -74,9 +74,8 @@ export class TodoStack extends Stack {
      * Setting API Gateway(task)
      */
     const tasksRoot = api.root.addResource('tasks');
-    const tasksUser = tasksRoot.addResource('{userId}');
     //Get Tasks
-    tasksUser.addMethod('GET', new apigw.LambdaIntegration(getAllFunction), {
+    tasksRoot.addMethod('GET', new apigw.LambdaIntegration(getAllFunction), {
       authorizationType: AuthorizationType.COGNITO,
       authorizer:{
         authorizerId: auth.ref,
@@ -95,7 +94,7 @@ export class TodoStack extends Stack {
         ]
       }
     })
-    tasksUser.addMethod('POST', new apigw.LambdaIntegration(addFunction), {
+    tasksRoot.addMethod('POST', new apigw.LambdaIntegration(addFunction), {
       requestValidator: new apigw.RequestValidator(this, 'body-validator-task', {
         restApi:api,
         validateRequestBody:true,
@@ -108,7 +107,7 @@ export class TodoStack extends Stack {
         authorizerId: auth.ref,
       }
     });
-    const taskSingle = tasksUser.addResource('{taskId}');
+    const taskSingle = tasksRoot.addResource('{taskId}');
     //Get Task
     taskSingle.addMethod('GET', new apigw.LambdaIntegration(getSingleFunction), {
       authorizationType: AuthorizationType.COGNITO,
