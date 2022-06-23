@@ -9,12 +9,9 @@ export class UserPool {
     this._scope = scope;
   }
 
-  public create():cognito.UserPool{
+  public create():[cognito.UserPool, cognito.UserPoolClient]{
     const userpool = new cognito.UserPool(this._scope, 'user-pool-for-todo', {
       selfSignUpEnabled: true,
-      standardAttributes: {
-        email: {required: true, mutable: true}
-      },
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
@@ -24,13 +21,13 @@ export class UserPool {
       }
     })
 
-    userpool.addClient('client', {
+    const client = userpool.addClient('client', {
       authFlows:{
         adminUserPassword:true,
         userPassword:true,
       }
     });
 
-    return userpool;
+    return [userpool, client];
   }
 }

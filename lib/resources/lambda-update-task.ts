@@ -12,7 +12,7 @@ export class LambdaForUpdateTask {
 
   public create():lambda.NodejsFunction{
     return new lambda.NodejsFunction(this._scope, 'lambda-update', {
-      entry:'lambda/update.ts',
+      entry:'lambda/task/update.ts',
       environment:{
         TABLE_NAME:this._tableName
       }
