@@ -10,7 +10,10 @@ interface Obj{
 export const handler = async (event: any,): Promise<any> => {
   const pathParams = event.pathParameters;
   const requestBody = JSON.parse(event.body);
-  const userId = pathParams.userId;
+  const token = event.headers['Authorization'];
+  const sections = token.split('.');
+  const payload = JSON.parse(Buffer.from(sections[1], 'base64').toString());
+  const userId = payload['cognito:username'];
   const taskId = pathParams.taskId;
   const date = Date.now();
 
