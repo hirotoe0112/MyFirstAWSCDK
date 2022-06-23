@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { UserPool } from './resources/userpool';
 import { DynamoDb } from './resources/dynamodb';
 import { LambdaForAddUser } from './resources/lambda-add-user';
+import { LambdaForAuth } from './resources/lambda-auth';
 import { LambdaForGetAllTasks } from './resources/lambda-get-all-tasks';
 import { LambdaForGetSingleTask } from './resources/lambda-get-single-task';
 import { LambdaForAddTask } from './resources/lambda-add-task';
@@ -135,6 +136,8 @@ export class TodoStack extends Stack {
      */
     const lambdaForAddUser = new LambdaForAddUser(this, client.userPoolClientId);
     const addUserFunction = lambdaForAddUser.create();
+    const lambdaForAuth = new LambdaForAuth(this, client.userPoolClientId);
+    const authFunction = lambdaForAuth.create();
 
     /**
      * Setting API Gateway(user)
@@ -150,6 +153,7 @@ export class TodoStack extends Stack {
         required:[
           'username',
           'password',
+          'email',
         ]
       }
     })
@@ -160,6 +164,29 @@ export class TodoStack extends Stack {
       }),
       requestModels:{
         'application/json': postUserModel,
+      }
+    });
+    //Auth User
+    const authRoot = api.root.addResource('auth');
+    const postAuthModel = new apigw.Model(this, 'post-validator-auth', {
+      restApi: api,
+      contentType: 'application/json',
+      description: 'To validate the request body',
+      schema:{
+        type:JsonSchemaType.OBJECT,
+        required:[
+          'username',
+          'password',
+        ]
+      }
+    })
+    authRoot.addMethod('POST', new apigw.LambdaIntegration(authFunction), {
+      requestValidator: new apigw.RequestValidator(this, 'body-validator-auth', {
+        restApi:api,
+        validateRequestBody:true,
+      }),
+      requestModels:{
+        'application/json': postAuthModel,
       }
     });
   }

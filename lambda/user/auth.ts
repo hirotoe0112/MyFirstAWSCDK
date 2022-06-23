@@ -7,26 +7,24 @@ export const handler = async (event: any,): Promise<any> => {
   const requestBody = JSON.parse(event.body);
   const username = requestBody.username;
   const password = requestBody.password;
-  const email = requestBody.email;
 
   const params = {
+    AuthFlow: 'USER_PASSWORD_AUTH',
     ClientId:CLIENT_ID,
-    Username: username,
-    Password: password,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: email,
-      },
-    ]
+    AuthParameters: {
+      'USERNAME': username,
+      'PASSWORD': password,
+    },
   }
 
   try{
-    const result = await cognito.signUp(params).promise();
+    const result = await cognito.initiateAuth(params).promise();
     console.log(result);
     return {
       statusCode: 200,
-      body: ''
+      body: JSON.stringify({
+        IdToken: result.AuthenticationResult?.IdToken,
+      })
     };
   }catch(e){
     return {
