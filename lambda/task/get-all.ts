@@ -8,7 +8,7 @@ export const handler = async (event: any,): Promise<any> => {
   const token = event.headers['Authorization'];
   const sections = token.split('.');
   const payload = JSON.parse(Buffer.from(sections[1], 'base64').toString());
-  const userId = payload['cognito:username'];
+  const userId = payload['sub'];
 
   const params = {
     TableName:TABLE_NAME,

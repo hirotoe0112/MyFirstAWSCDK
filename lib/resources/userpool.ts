@@ -12,6 +12,15 @@ export class UserPool {
   public create():[cognito.UserPool, cognito.UserPoolClient]{
     const userpool = new cognito.UserPool(this._scope, 'user-pool-for-todo', {
       selfSignUpEnabled: true,
+      autoVerify: {
+        email: true,
+      },
+      standardAttributes: {
+        email: {
+          required: true,
+          mutable: true,
+        },
+      },
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
