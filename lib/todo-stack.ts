@@ -10,7 +10,7 @@ import { LambdaForDeleteTask } from './resources/lambda-delete-task';
 import { ApiGateway } from './resources/apigateway';
 import { Authorizer } from './resources/authorizer';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
-import { AuthorizationType } from 'aws-cdk-lib/aws-apigateway';
+import { JsonSchemaType, AuthorizationType } from 'aws-cdk-lib/aws-apigateway';
 
 export class TodoStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -73,16 +73,42 @@ export class TodoStack extends Stack {
      */
     const tasksRoot = api.root.addResource('tasks');
     const tasksUser = tasksRoot.addResource('{userId}');
+    //Get User's All Tasks
     tasksUser.addMethod('GET', new apigw.LambdaIntegration(getAllFunction), {
       authorizationType: AuthorizationType.COGNITO,
       authorizer:{
         authorizerId: auth.ref,
       }
     });
-    tasksUser.addMethod('POST', new apigw.LambdaIntegration(addFunction));
+
+    //Create New Task
+    const postModel = new apigw.Model(this, 'post-validator', {
+      restApi: api,
+      contentType: 'application/json',
+      description: 'To validate the request body',
+      schema:{
+        type:JsonSchemaType.OBJECT,
+        required:[
+          'title',
+          'content'
+        ]
+      }
+    })
+    tasksUser.addMethod('POST', new apigw.LambdaIntegration(addFunction), {
+      requestValidator: new apigw.RequestValidator(this, 'body-validator', {
+        restApi:api,
+        validateRequestBody:true,
+      }),
+      requestModels:{
+        'application/json': postModel,
+      },
+    });
     const taskSingle = tasksUser.addResource('{taskId}');
+    //Get Task
     taskSingle.addMethod('GET', new apigw.LambdaIntegration(getSingleFunction));
+    //Update Task
     taskSingle.addMethod('PATCH', new apigw.LambdaIntegration(updateFunction));
+    //Delete Task
     taskSingle.addMethod('DELETE', new apigw.LambdaIntegration(deleteFunction));
   }
 }
