@@ -1,6 +1,6 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Cognito } from './resources/cognito';
+import { UserPool } from './resources/userpool';
 import { DynamoDb } from './resources/dynamodb';
 import { LambdaForGetAllTasks } from './resources/lambda-get-all-tasks';
 import { LambdaForGetSingleTask } from './resources/lambda-get-single-task';
@@ -59,13 +59,13 @@ export class TodoStack extends Stack {
     /**
      * Create Cognito Resource
      */
-    const cognito = new Cognito(this);
-    const userpool = cognito.create();
+    const userPool = new UserPool(this);
+    const pool = userPool.create();
 
     /**
-     * Authorizer
+     * Create Authorizer
      */
-    const authorizer = new Authorizer(this, api.restApiId, userpool.userPoolArn);
+    const authorizer = new Authorizer(this, api.restApiId, pool.userPoolArn);
     const auth = authorizer.create();
 
     /**
@@ -73,15 +73,14 @@ export class TodoStack extends Stack {
      */
     const tasksRoot = api.root.addResource('tasks');
     const tasksUser = tasksRoot.addResource('{userId}');
-    //Get User's All Tasks
+    //Get Tasks
     tasksUser.addMethod('GET', new apigw.LambdaIntegration(getAllFunction), {
       authorizationType: AuthorizationType.COGNITO,
       authorizer:{
         authorizerId: auth.ref,
       }
     });
-
-    //Create New Task
+    //Add Task
     const postModel = new apigw.Model(this, 'post-validator', {
       restApi: api,
       contentType: 'application/json',
@@ -102,13 +101,32 @@ export class TodoStack extends Stack {
       requestModels:{
         'application/json': postModel,
       },
+      authorizationType: AuthorizationType.COGNITO,
+      authorizer:{
+        authorizerId: auth.ref,
+      }
     });
     const taskSingle = tasksUser.addResource('{taskId}');
     //Get Task
-    taskSingle.addMethod('GET', new apigw.LambdaIntegration(getSingleFunction));
+    taskSingle.addMethod('GET', new apigw.LambdaIntegration(getSingleFunction), {
+      authorizationType: AuthorizationType.COGNITO,
+      authorizer:{
+        authorizerId: auth.ref,
+      }
+    });
     //Update Task
-    taskSingle.addMethod('PATCH', new apigw.LambdaIntegration(updateFunction));
+    taskSingle.addMethod('PATCH', new apigw.LambdaIntegration(updateFunction), {
+      authorizationType: AuthorizationType.COGNITO,
+      authorizer:{
+        authorizerId: auth.ref,
+      }
+    });
     //Delete Task
-    taskSingle.addMethod('DELETE', new apigw.LambdaIntegration(deleteFunction));
+    taskSingle.addMethod('DELETE', new apigw.LambdaIntegration(deleteFunction), {
+      authorizationType: AuthorizationType.COGNITO,
+      authorizer:{
+        authorizerId: auth.ref,
+      }
+    });
   }
 }
