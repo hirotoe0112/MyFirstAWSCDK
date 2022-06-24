@@ -82,7 +82,7 @@ export class TodoStack extends Stack {
       }
     });
     //Add Task
-    const postTaskModel = new apigw.Model(this, 'post-validator-task', {
+    const postTaskModel = new apigw.Model(this, 'apigateway-model-validator-to-post-task', {
       restApi: api,
       contentType: 'application/json',
       description: 'To validate the request body',
@@ -95,7 +95,7 @@ export class TodoStack extends Stack {
       }
     })
     tasksRoot.addMethod('POST', new apigw.LambdaIntegration(addFunction), {
-      requestValidator: new apigw.RequestValidator(this, 'body-validator-task', {
+      requestValidator: new apigw.RequestValidator(this, 'apigateway-validator-to-post-task', {
         restApi:api,
         validateRequestBody:true,
       }),
@@ -143,7 +143,7 @@ export class TodoStack extends Stack {
      */
     //Add User
     const usersRoot = api.root.addResource('users');
-    const postUserModel = new apigw.Model(this, 'post-validator-user', {
+    const postUserModel = new apigw.Model(this, 'apigateway-model-validator-to-post-user', {
       restApi: api,
       contentType: 'application/json',
       description: 'To validate the request body',
@@ -157,7 +157,7 @@ export class TodoStack extends Stack {
       }
     })
     usersRoot.addMethod('POST', new apigw.LambdaIntegration(addUserFunction), {
-      requestValidator: new apigw.RequestValidator(this, 'body-validator-user', {
+      requestValidator: new apigw.RequestValidator(this, 'apigateway-validator-to-post-user', {
         restApi:api,
         validateRequestBody:true,
       }),
@@ -167,7 +167,7 @@ export class TodoStack extends Stack {
     });
     //Auth User
     const authRoot = api.root.addResource('auth');
-    const postAuthModel = new apigw.Model(this, 'post-validator-auth', {
+    const postAuthModel = new apigw.Model(this, 'apigateway-model-validator-to-auth', {
       restApi: api,
       contentType: 'application/json',
       description: 'To validate the request body',
@@ -180,7 +180,7 @@ export class TodoStack extends Stack {
       }
     })
     authRoot.addMethod('POST', new apigw.LambdaIntegration(authFunction), {
-      requestValidator: new apigw.RequestValidator(this, 'body-validator-auth', {
+      requestValidator: new apigw.RequestValidator(this, 'apigateway-validator-to-auth', {
         restApi:api,
         validateRequestBody:true,
       }),

@@ -11,7 +11,7 @@ export class LambdaForAddUser {
   }
 
   public create():lambda.NodejsFunction{
-    return new lambda.NodejsFunction(this._scope, 'lambda-add-user', {
+    return new lambda.NodejsFunction(this._scope, 'lambda-to-add-user', {
       entry:'lambda/user/add.ts',
       environment:{
         CLIENT_ID:this._appClientId,

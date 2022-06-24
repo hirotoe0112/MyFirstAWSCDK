@@ -11,7 +11,7 @@ export class ApiGateway {
   }
 
   public create():apigw.RestApi{
-    return new apigw.RestApi(this._scope, 'api-for-todo', {
+    return new apigw.RestApi(this._scope, 'apigateway', {
       deployOptions:{
         stageName:this._target,
       },
