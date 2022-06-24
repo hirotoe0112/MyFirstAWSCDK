@@ -13,7 +13,7 @@ export class Authorizer {
   }
 
   public create():apigw.CfnAuthorizer{
-    return new apigw.CfnAuthorizer(this._scope, 'cfnAuth', {
+    return new apigw.CfnAuthorizer(this._scope, 'cfnAuthorizer', {
       restApiId: this._restApiId,
       name: 'api-Authorizer',
       type: 'COGNITO_USER_POOLS',

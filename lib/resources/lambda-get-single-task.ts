@@ -11,7 +11,7 @@ export class LambdaForGetSingleTask {
   }
 
   public create():lambda.NodejsFunction{
-    return new lambda.NodejsFunction(this._scope, 'lambda-get-single', {
+    return new lambda.NodejsFunction(this._scope, 'lambda-to-get-single-task', {
       entry:'lambda/task/get-single.ts',
       environment:{
         TABLE_NAME:this._tableName

@@ -11,7 +11,7 @@ export class LambdaForAuth {
   }
 
   public create():lambda.NodejsFunction{
-    return new lambda.NodejsFunction(this._scope, 'lambda-auth', {
+    return new lambda.NodejsFunction(this._scope, 'lambda-to-auth', {
       entry:'lambda/user/auth.ts',
       environment:{
         CLIENT_ID:this._appClientId,
