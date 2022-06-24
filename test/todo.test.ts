@@ -52,6 +52,24 @@ test('Fine-grained assertions', () => {
     template.resourceCountIs('AWS::Lambda::Function', 8);
     template.resourceCountIs('AWS::DynamoDB::Table', 1);
 
+    template.hasResource('AWS::ApiGateway::RestApi', {});
+    template.hasResourceProperties('AWS::ApiGateway::Resource', {
+        PathPart: 'tasks',
+    });
+    template.hasResourceProperties('AWS::ApiGateway::Resource', {
+        PathPart: '{taskId}',
+    });
+    template.hasResourceProperties('AWS::ApiGateway::Resource', {
+        PathPart: 'users',
+    });
+    template.hasResourceProperties('AWS::ApiGateway::Resource', {
+        PathPart: 'auth',
+    });
+    template.hasResourceProperties('AWS::ApiGateway::Resource', {
+        PathPart: 'confirm',
+    });
+    template.hasResourceProperties('AWS::ApiGateway::RequestValidator', {});
+
 //   const app = new cdk.App();
 //     // WHEN
 //   const stack = new CdkDemo.CdkDemoStack(app, 'MyTestStack');
