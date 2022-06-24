@@ -11,7 +11,7 @@ export class LambdaForGetAllTasks {
   }
 
   public create():lambda.NodejsFunction{
-    return new lambda.NodejsFunction(this._scope, 'lambda-get-all', {
+    return new lambda.NodejsFunction(this._scope, 'lambda-to-get-all-tasks', {
       entry:'lambda/task/get-all.ts',
       environment:{
         TABLE_NAME:this._tableName

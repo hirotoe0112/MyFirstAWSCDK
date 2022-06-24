@@ -10,7 +10,7 @@ export class UserPool {
   }
 
   public create():[cognito.UserPool, cognito.UserPoolClient]{
-    const userpool = new cognito.UserPool(this._scope, 'user-pool-for-todo', {
+    const userpool = new cognito.UserPool(this._scope, 'user-pool', {
       selfSignUpEnabled: true,
       autoVerify: {
         email: true,
@@ -30,7 +30,7 @@ export class UserPool {
       }
     })
 
-    const client = userpool.addClient('client', {
+    const client = userpool.addClient('user-pool-client', {
       authFlows:{
         adminUserPassword:true,
         userPassword:true,
