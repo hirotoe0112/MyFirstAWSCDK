@@ -4,6 +4,7 @@ import { UserPool } from './resources/userpool';
 import { DynamoDb } from './resources/dynamodb';
 import { LambdaForAddUser } from './resources/lambda-add-user';
 import { LambdaForAuth } from './resources/lambda-auth';
+import { LambdaForConfirm } from './resources/lambda-confirm';
 import { LambdaForGetAllTasks } from './resources/lambda-get-all-tasks';
 import { LambdaForGetSingleTask } from './resources/lambda-get-single-task';
 import { LambdaForAddTask } from './resources/lambda-add-task';
@@ -137,6 +138,8 @@ export class TodoStack extends Stack {
     const addUserFunction = lambdaForAddUser.create();
     const lambdaForAuth = new LambdaForAuth(this, client.userPoolClientId);
     const authFunction = lambdaForAuth.create();
+    const lambdaForConfirm = new LambdaForConfirm(this, client.userPoolClientId);
+    const confirmFunction = lambdaForConfirm.create();
 
     /**
      * Setting API Gateway(user)
@@ -186,6 +189,29 @@ export class TodoStack extends Stack {
       }),
       requestModels:{
         'application/json': postAuthModel,
+      }
+    });
+    //Confirm User
+    const confirmRoot = api.root.addResource('confirm');
+    const postConfirmModel = new apigw.Model(this, 'apigateway-model-validator-to-confirm', {
+      restApi: api,
+      contentType: 'application/json',
+      description: 'To validate the request body',
+      schema:{
+        type:JsonSchemaType.OBJECT,
+        required:[
+          'username',
+          'code',
+        ]
+      }
+    })
+    confirmRoot.addMethod('POST', new apigw.LambdaIntegration(confirmFunction), {
+      requestValidator: new apigw.RequestValidator(this, 'apigateway-validator-to-confirm', {
+        restApi:api,
+        validateRequestBody:true,
+      }),
+      requestModels:{
+        'application/json': postConfirmModel,
       }
     });
   }
