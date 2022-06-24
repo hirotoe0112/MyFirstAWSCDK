@@ -11,7 +11,7 @@ export class LambdaForDeleteTask {
   }
 
   public create():lambda.NodejsFunction{
-    return new lambda.NodejsFunction(this._scope, 'lambda-delete', {
+    return new lambda.NodejsFunction(this._scope, 'lambda-to-delete-task', {
       entry:'lambda/task/delete.ts',
       environment:{
         TABLE_NAME:this._tableName

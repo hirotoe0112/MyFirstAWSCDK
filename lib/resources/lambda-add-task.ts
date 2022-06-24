@@ -11,7 +11,7 @@ export class LambdaForAddTask {
   }
 
   public create():lambda.NodejsFunction{
-    return new lambda.NodejsFunction(this._scope, 'lambda-add', {
+    return new lambda.NodejsFunction(this._scope, 'lambda-to-add-task', {
       entry:'lambda/task/add.ts',
       environment:{
         TABLE_NAME:this._tableName
