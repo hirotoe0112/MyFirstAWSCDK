@@ -2,12 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as assert from 'aws-cdk-lib/assertions';
 import { Template } from 'aws-cdk-lib/assertions';
 import { TodoStack } from '../lib/todo-stack';
-// import * as cdk from 'aws-cdk-lib';
-// import { Template } from 'aws-cdk-lib/assertions';
-// import * as CdkDemo from '../lib/cdk-demo-stack';
 
-// example test. To run these tests, uncomment this file along with the
-// example resource in lib/cdk-demo-stack.ts
 test('Resources counts', () => {
   /**
    * Set up
