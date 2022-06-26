@@ -71,5 +71,116 @@ test('apigateway settings', () => {
   template.hasResourceProperties('AWS::ApiGateway::Resource', {
     PathPart: 'confirm',
   });
-  template.hasResourceProperties('AWS::ApiGateway::RequestValidator', {});
+
+  //RestAPIのIDを取得
+  const restApi = template.findResources('AWS::ApiGateway::RestApi');
+  const restApiList = Object.keys(restApi);
+  const restApiId = restApiList[0];
+
+  template.hasResourceProperties('AWS::ApiGateway::RequestValidator', {
+    RestApiId: {
+      Ref: restApiId
+    },
+    ValidateRequestBody: true
+  });
+
+  //titleとcontentが必須であるモデルの存在
+  template.hasResourceProperties('AWS::ApiGateway::Model', {
+    ContentType: 'application/json',
+    Schema: {
+      type: 'object',
+      required: [
+        'title',
+        'content',
+      ],
+    }
+  });
+  //usernameとpasswordとemailが必須であるモデルの存在
+  template.hasResourceProperties('AWS::ApiGateway::Model', {
+    ContentType: 'application/json',
+    Schema: {
+      type: 'object',
+      required: [
+        'username',
+        'password',
+        'email',
+      ],
+    }
+  });
+  //usernameとpasswordが必須であるモデルの存在
+  template.hasResourceProperties('AWS::ApiGateway::Model', {
+    ContentType: 'application/json',
+    Schema: {
+      type: 'object',
+      required: [
+        'username',
+        'password',
+      ],
+    }
+  });
+  //usernameとcodeが必須であるモデルの存在
+  template.hasResourceProperties('AWS::ApiGateway::Model', {
+    ContentType: 'application/json',
+    Schema: {
+      type: 'object',
+      required: [
+        'username',
+        'code',
+      ],
+    }
+  });
+});
+
+test('lambda settings', () => {
+  /**
+   * Set up
+   */
+  const app = new cdk.App(
+    {
+      context: {
+        "variables": {
+          "target": "dev"
+        }
+      }
+    }
+  )
+  const todoStack = new TodoStack(app, 'test-todo');
+  const template = Template.fromStack(todoStack);
+
+  /**
+   * Test
+   */
+  //Lambda Function一覧を取得
+  const functions = template.findResources('AWS::Lambda::Function');
+
+  //全てのLambda FunctionがAPI Gatewayに紐づいているか
+  Object.keys(functions).forEach((key) => {
+    template.hasResourceProperties('AWS::ApiGateway::Method', {
+      Integration: {
+        Uri: {
+          'Fn::Join': [
+            '',
+            [
+              'arn:',
+              {
+                Ref: 'AWS::Partition'
+              },
+              ':apigateway:',
+              {
+                Ref: 'AWS::Region'
+              },
+              ':lambda:path/2015-03-31/functions/',
+              {
+                'Fn::GetAtt': [
+                  key,
+                  'Arn'
+                ]
+              },
+              '/invocations'
+            ]
+          ]
+        }
+      }
+    })
+  })
 });
