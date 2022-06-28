@@ -1,6 +1,9 @@
 import { Construct } from 'constructs';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
 
+/**
+ * API Gateway Authorizerリソースクラス
+ */
 export class Authorizer {
   private readonly _scope:Construct;
   private readonly _restApiId:string;

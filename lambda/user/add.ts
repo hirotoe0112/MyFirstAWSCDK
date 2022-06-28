@@ -3,7 +3,13 @@ import * as AWS from 'aws-sdk';
 const cognito = new AWS.CognitoIdentityServiceProvider();
 const CLIENT_ID=process.env.CLIENT_ID || "";
 
+/**
+ * ユーザ登録
+ * @param event リクエストデータ
+ * @returns レスポンスデータ
+ */
 export const handler = async (event: any,): Promise<any> => {
+  //ボディからユーザID、パスワード、メールアドレスを取得
   const requestBody = JSON.parse(event.body);
   const username = requestBody.username;
   const password = requestBody.password;
@@ -22,8 +28,7 @@ export const handler = async (event: any,): Promise<any> => {
   }
 
   try{
-    const result = await cognito.signUp(params).promise();
-    console.log(result);
+    await cognito.signUp(params).promise();
     return {
       statusCode: 200,
       body: ''

@@ -3,6 +3,9 @@ import { Construct } from 'constructs';
 import * as dynamoDb from 'aws-cdk-lib/aws-dynamodb';
 import { AttributeType } from 'aws-cdk-lib/aws-dynamodb';
 
+/**
+ * DynamoDBリソースクラス
+ */
 export class DynamoDb {
   private readonly _scope:Construct;
 

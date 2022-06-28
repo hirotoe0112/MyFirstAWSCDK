@@ -20,6 +20,7 @@ test('apigateway dev', () => {
   /**
    * Test
    */
+  //環境変数で設定したステージが存在すること
   template.resourceCountIs('AWS::ApiGateway::Stage', 1);
   template.hasResourceProperties('AWS::ApiGateway::Stage', {
     StageName: 'dev',
@@ -45,6 +46,7 @@ test('apigateway prod', () => {
   /**
    * Test
    */
+  //環境変数で設定したステージが存在すること
   template.resourceCountIs('AWS::ApiGateway::Stage', 1);
   template.hasResourceProperties('AWS::ApiGateway::Stage', {
     StageName: 'prod',
