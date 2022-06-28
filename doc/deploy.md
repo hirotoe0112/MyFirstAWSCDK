@@ -12,8 +12,7 @@ cdk bootstrap aws://{accountID}/{region}
 ### プロジェクトのクローン
 ```
 git init
-git remote add origin https://github.com/cm-mad-interview/todo-hirotoe0112.git
-git pull origin master
+git clone https://github.com/cm-mad-interview/todo-hirotoe0112.git
 ```
 ### 依存関係のインストール
 ```
@@ -45,8 +44,7 @@ AWS_SECRET_ACCESS_KEY　：IAMユーザのシークレットアクセスキー
 ### プロジェクトのクローン
 ```
 git init
-git remote add origin https://github.com/cm-mad-interview/todo-hirotoe0112.git
-git pull origin master
+git clone https://github.com/cm-mad-interview/todo-hirotoe0112.git
 ```
 ### ブランチを切ってソースコードを修正し、pull requestを行う
 ```
