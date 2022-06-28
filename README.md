@@ -4,6 +4,6 @@
 - npm 8.5.0
 
 ## ドキュメント
-- システム構成
+- [構成図](/doc/drawio.png)
 - [API仕様](/doc/api.md)
 - [デプロイ手順](/doc/deploy.md)
