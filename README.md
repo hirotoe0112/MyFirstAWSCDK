@@ -5,5 +5,5 @@
 
 ## ドキュメント
 - システム構成
-- [API仕様](/doc/API仕様.md)
-- [デプロイ手順](/doc/デプロイ手順.md)
+- [API仕様](/doc/api.md)
+- [デプロイ手順](/doc/deploy.md)
