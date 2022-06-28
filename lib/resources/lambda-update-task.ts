@@ -1,6 +1,9 @@
 import { Construct } from 'constructs';
 import { aws_lambda_nodejs as lambda } from 'aws-cdk-lib';
 
+/**
+ * タスク更新用Lambda関数リソースクラス
+ */
 export class LambdaForUpdateTask {
   private readonly _scope:Construct;
   private readonly _tableName:string;

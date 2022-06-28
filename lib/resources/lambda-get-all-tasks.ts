@@ -1,6 +1,9 @@
 import { Construct } from 'constructs';
 import { aws_lambda_nodejs as lambda } from 'aws-cdk-lib';
 
+/**
+ * タスク全件取得用Lambda関数リソースクラス
+ */
 export class LambdaForGetAllTasks {
   private readonly _scope:Construct;
   private readonly _tableName:string;

@@ -1,6 +1,9 @@
 import { Construct } from 'constructs';
 import { aws_lambda_nodejs as lambda } from 'aws-cdk-lib';
 
+/**
+ * ユーザ認証用Lambda関数リソースクラス
+ */
 export class LambdaForAuth {
   private readonly _scope:Construct;
   private readonly _appClientId:string;

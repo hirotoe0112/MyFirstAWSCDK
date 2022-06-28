@@ -2,6 +2,9 @@ import { Construct } from 'constructs';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { RemovalPolicy } from 'aws-cdk-lib';
 
+/**
+ * Cognito UserPoolリソースクラス
+ */
 export class UserPool {
   private readonly _scope:Construct;
 

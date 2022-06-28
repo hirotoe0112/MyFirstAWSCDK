@@ -1,6 +1,9 @@
 import { Construct } from 'constructs';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
 
+/**
+ * API Gatewayリソースクラス
+ */
 export class ApiGateway {
   private readonly _scope:Construct;
   private readonly _target:string;

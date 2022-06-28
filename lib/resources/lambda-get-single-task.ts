@@ -1,6 +1,9 @@
 import { Construct } from 'constructs';
 import { aws_lambda_nodejs as lambda } from 'aws-cdk-lib';
 
+/**
+ * タスク1件取得用Lambda関数リソースクラス
+ */
 export class LambdaForGetSingleTask {
   private readonly _scope:Construct;
   private readonly _tableName:string;
