@@ -40,7 +40,6 @@ Settings⇒Secrets⇒Actionsに以下の値を設定します。
 AWS_ACCESS_KEY_ID　：IAMユーザのアクセスキー
 AWS_SECRET_ACCESS_KEY　：IAMユーザのシークレットアクセスキー
 ```
-※当リポジトリには応募者のキーが設定済み
 ### プロジェクトのクローン
 ```
 git init
